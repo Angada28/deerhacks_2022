@@ -1,9 +1,13 @@
 import discord
 import os
 import sympy as sympy
-from src import out
+from parse import Parser
+from commands import dispatch_command
+from out import sympy_expr_to_img, bytes_io_to_discord_file
 
 client = discord.Client()
+parser = Parser()
+LATEX = True
 
 try:
     with open('token') as tokenf:
@@ -22,6 +26,21 @@ async def on_message(message):
     if message.author == client.user:
         return
 
+    if message.content.startswith('$deermath'):
+        await message.channel.send('Thinking...')
+        try:
+            cmd = parser.parse(message.content)
+            out = dispatch_command(cmd)
+            
+            if LATEX:
+                await message.channel.send(
+                    file=bytes_io_to_discord_file(sympy_expr_to_img(out)))
+            else:
+                await message.channel.send(f"`{str(out)}`")
+        except Exception as e:
+            await message.channel.send(f"Oops, there has been an issue:\n{str(e)}")
+
+
     if message.content.startswith('$math'):
         await message.channel.send('worked')
         sentenced = message.content.split(" ")
@@ -35,8 +54,8 @@ async def on_message(message):
     
     if message.content.startswith('$test'):
         await message.channel.send(
-            file=out.bytes_io_to_discord_file(
-                out.sympy_expr_to_img(
+            file=bytes_io_to_discord_file(
+                sympy_expr_to_img(
                     # Note sympify is not safe to use on arbitrary input
                     sympy.sympify("x^2 - 3*y + 5"))
             )
