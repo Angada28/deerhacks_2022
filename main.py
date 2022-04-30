@@ -3,6 +3,13 @@ import os
 
 client = discord.Client()
 
+try:
+    with open('token') as tokenf:
+        token = tokenf.readline().strip()
+except FileNotFoundError as e:
+    print("[ERROR] Must create a file named 'token' with the discord token.")
+    raise e
+
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
@@ -23,7 +30,7 @@ async def on_message(message):
             return
         await message.channel.send(sentence);
         return
-my_secret = os.environ['TOKEN']
-client.run(my_secret)
+
+client.run(token)
 
 
