@@ -1,14 +1,14 @@
 import discord
 import os
 import sympy as sympy
+from history import History
 from parse import Parser
 from commands import dispatch_command
 from out import sympy_expr_to_img, bytes_io_to_discord_file
+from state import BotState
 
 client = discord.Client()
-parser = Parser()
-cfg_latex = True
-
+state = BotState()
 
 
 @client.event
@@ -18,43 +18,51 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    global cfg_latex
     if message.author == client.user:
         return
 
-    if message.content.startswith('$deermath-latex-on'):
-        cfg_latex = True
+    if message.content.startswith('$deermath latex on'):
+        state.cfg_latex = True
         await message.channel.send('Ok...')
     
-    elif message.content.startswith('$deermath-latex-off'):
-        cfg_latex = False
+    elif message.content.startswith('$deermath latex off'):
+        state.cfg_latex = False
         await message.channel.send('Ok...')
 
     elif message.content.startswith('$deermath'):
         await message.channel.send('Thinking...')
         try:
-            cmd = parser.parse(message.content)
-            out = dispatch_command(cmd)
+            cmd = state.parser.parse(message.content)
+            out = dispatch_command(cmd, state)
             
-            if cfg_latex:
+            if state.cfg_latex:
                 await message.channel.send(
                     file=bytes_io_to_discord_file(sympy_expr_to_img(out)))
             else:
                 await message.channel.send(f"`{str(out)}`")
         except Exception as e:
             await message.channel.send(f"Oops, there has been an issue:\n{str(e)}")
-
+            out = "ERROR"
+        state.global_history.register_command(message.channel, message.content, out)
 
     elif message.content.startswith('$repeat'):
-        await message.channel.send('worked')
-        sentenced = message.content.split(" ")
-        sentence = ''
-        for i in range(1,len(sentenced)):
-            sentence += sentenced[i] + " "
-        if sentence == '':
-            return
-        await message.channel.send(sentence)
-        return
+        try:
+            try:
+                idx = -abs(int(message.content.split()[1].strip()))
+            except IndexError:
+                idx = -1
+
+            cmd, out = state.global_history.last(message.channel, idx)
+            await message.channel.send(f"> {cmd}")
+
+            if state.cfg_latex and not isinstance(out, str):
+                await message.channel.send(
+                    file=bytes_io_to_discord_file(sympy_expr_to_img(out)))
+            else:
+                await message.channel.send(f"`{str(out)}`")
+        except Exception as e:
+            await message.channel.send(f"Oops, there has been an issue:\n{str(e)}")
+            
     
     elif message.content.startswith('$test'):
         await message.channel.send(

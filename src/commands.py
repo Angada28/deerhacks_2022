@@ -8,8 +8,8 @@ COMMANDS_TO_IMPL = {
     'simplify'.casefold(): simplify
 }
 
-def dispatch_command(cmd: Command) -> Any:
-    return COMMANDS_TO_IMPL[cmd.command](cmd.args)
+def dispatch_command(cmd: Command, state) -> Any:
+    return COMMANDS_TO_IMPL[cmd.command](cmd.args, state)
 
 
 # print(dispatch_command(Parser().parse("$deermath solve y^2 - xy = 5 for y")))

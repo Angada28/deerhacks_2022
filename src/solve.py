@@ -2,7 +2,7 @@ from parse_solve import SolveArgs
 from sympy import solveset, symbols, Eq
 from sympy import solve as sympy_solve
 
-def solve(args: SolveArgs):
+def solve(args: SolveArgs, state):
     assert isinstance(args, SolveArgs)
     
     eq_tuples = [(e.lhs, e.rhs) for e in args.eqn]
@@ -15,7 +15,7 @@ def solve(args: SolveArgs):
 
     if len(eq_tuples) == 1:
         el, er = eq_tuples[0]
-        vars = args.var if args.var is not None else 'x'
+        vars = args.var if args.var != "" else 'x'
         return solveset(Eq(el, er), symbols(vars))
     else:
         # Note solveset doesn't support systems of equations yet.

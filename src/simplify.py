@@ -1,7 +1,7 @@
 from parse_simplify import SimplifyArgs
 from sympy import simplify as sympy_simplify
 
-def simplify(args: SimplifyArgs):
+def simplify(args: SimplifyArgs, state):
     assert isinstance(args, SimplifyArgs)
     expr = args.expr
     for subst in args.where:
