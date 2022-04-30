@@ -1,5 +1,7 @@
 import discord
 import os
+import sympy as sympy
+from src import out
 
 client = discord.Client()
 
@@ -28,8 +30,17 @@ async def on_message(message):
             sentence += sentenced[i] + " "
         if sentence == '':
             return
-        await message.channel.send(sentence);
+        await message.channel.send(sentence)
         return
+    
+    if message.content.startswith('$test'):
+        await message.channel.send(
+            file=out.bytes_io_to_discord_file(
+                out.sympy_expr_to_img(
+                    # Note sympify is not safe to use on arbitrary input
+                    sympy.sympify("x^2 - 3*y + 5"))
+            )
+        )
 
 client.run(token)
 
