@@ -9,7 +9,7 @@ from parse_where_clause import parse_where
 @ dataclass
 class SolveArgs:
     var: str
-    eqn: Eq
+    eqn: List[Eq]
     where: List[Tuple[Expr, Expr]]
 
 
@@ -19,6 +19,9 @@ def parse_equation(eqn: str) -> Eq:
         return Eq(parse_sympy_expr(lhs), parse_sympy_expr(rhs))
     # In lieu of an equal sign, we equate the expression to zero...
     return Eq(parse_sympy_expr(eqn), 0)
+
+def parse_equations(eqns: str) -> List[Eq]:
+    return [parse_equation(eq) for eq in eqns.split(',')]
 
 def parse_solve(args: str) -> Any:
     fragments = list(map(lambda s: s.strip().casefold(), args.split()))
@@ -42,8 +45,8 @@ def parse_solve(args: str) -> Any:
                 where_list.append(fragment)
     
     eqn = ' '.join(eqn_list)
-    for_clause = ' '.join(for_list) if for_list != [] else 'x'
+    for_clause = ' '.join(for_list)
     where_clause = ' '.join(where_list)
     
-    return SolveArgs(for_clause, parse_equation(eqn), parse_where(where_clause))
+    return SolveArgs(for_clause, parse_equations(eqn), parse_where(where_clause))
 
