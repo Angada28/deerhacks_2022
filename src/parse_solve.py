@@ -4,18 +4,17 @@ from parse_sympy_expr import parse_sympy_expr
 from typing import Any
 
 
-
-
 @ dataclass
 class SolveArgs:
     var: str
-    eqn: str
+    eqn: Eq
 
 
 def parse_equation(eqn: str) -> Eq:
     if '=' in eqn:
         lhs, rhs = eqn.split('=')
         return Eq(parse_sympy_expr(lhs), parse_sympy_expr(rhs))
+    # In lieu of an equal sign, we equate the expression to zero...
     return Eq(parse_sympy_expr(eqn), 0)
 
 

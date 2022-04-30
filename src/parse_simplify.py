@@ -7,7 +7,7 @@ from typing import Any, List, Tuple
 @dataclass
 class SimplifyArgs:
     expr: Expr
-    where: List[Tuple[Any, Any]]
+    where: List[Tuple[Expr, Expr]]
 
 def parse_where(where_clauses):
     out = []
