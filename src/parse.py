@@ -4,11 +4,13 @@ Parsing of bot commands.
 
 from dataclasses import dataclass
 from typing import Any, List
+from parse_simplify import parse_simplify
 
 from parse_solve import parse_solve
 
 COMMANDS_TO_ARG_PARSER = {
     'solve'.casefold(): parse_solve,
+    'simplify'.casefold(): parse_simplify,
 }
 
 @dataclass

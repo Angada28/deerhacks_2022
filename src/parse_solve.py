@@ -1,13 +1,9 @@
-from sympy import Eq, parse_expr
-from sympy.parsing.sympy_parser import standard_transformations, convert_xor, split_symbols, implicit_multiplication_application
+from sympy import Eq
 from dataclasses import dataclass
+from parse_sympy_expr import parse_sympy_expr
 from typing import Any
 
 
-def parse_sympy_expr(e):
-    return parse_expr(
-        e,
-        transformations=([t for t in standard_transformations] + [convert_xor, implicit_multiplication_application]))
 
 
 @ dataclass

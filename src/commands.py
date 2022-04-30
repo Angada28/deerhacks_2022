@@ -1,9 +1,11 @@
 from typing import Any
 from parse import Command, Parser
 from solve import solve
+from simplify import simplify
 
 COMMANDS_TO_IMPL = {
-    'solve'.casefold() : solve
+    'solve'.casefold() : solve,
+    'simplify'.casefold(): simplify
 }
 
 def dispatch_command(cmd: Command) -> Any:
