@@ -1,6 +1,7 @@
-from sympy import Eq
-from dataclasses import dataclass
-from parse_sympy_expr import parse_sympy_expr
+from sympy.parsing.sympy_parser import parse_expr
+from sympy.parsing.sympy_parser import standard_transformations, \
+    implicit_multiplication_application
+from sympy.parsing.sympy_parser import T
 from typing import Any
 
 class SumArgs:
@@ -15,6 +16,7 @@ class SumArgs:
         self.lower = l
         self.var = v
 
+
 def parse_summation(args: str) -> Any:
     try:
         _args = args.split("where", maxsplit=1)
@@ -28,8 +30,10 @@ def parse_summation(args: str) -> Any:
         upper = upper.strip()
         lower = lower.strip()
         var = var.strip()
+        transformations = (standard_transformations +
+                           (implicit_multiplication_application,))
+        exp = str(parse_expr(exp, transformations='all'))
     except IndexError:
-        return None
+        raise Exception("Invalid input")
 
     return SumArgs(exp, upper, lower, var)
-
