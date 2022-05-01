@@ -21,10 +21,25 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content.startswith('$deermath latex on'):
+    if message.content.startswith('$deermath') and not message.content.startswith('$deermath '):
+        await message.channel.send(f"`{'Enter any of the following commands for:'}`")
+        await message.channel.send(f"`{'Derivatives:'}`")
+        await message.channel.send(f"`{'    diff {expression}'}`")
+        await message.channel.send(f"`{'    EXAMPLE: diff 5x^2'}`")
+        await message.channel.send(f"`{'    For a multivariable expression please add'}`")
+        await message.channel.send(f"`{'    the variabe to differentiate with respect to'}`")
+        await message.channel.send(f"`{'        diff 2x + y for y'}`")
+        await message.channel.send(f"`{'Summations:'}`")
+        await message.channel.send(f"`{'    summation {expression} where {variable} between {lower bound} and {upper bound}'}`")
+        await message.channel.send(f"`{'    EXAMPLE: summation 2k where k between 1 and n'}`")
+        await message.channel.send(f"`{'REPEAT (repeats the last command):'}`")
+        await message.channel.send(f"`{'    repeat'}`")
+        await message.channel.send(f"`{'SIMPLIFY:'}`")
+        await message.channel.send(f"`{'    simplify {expression}'}`")
+    elif message.content.startswith('$deermath latex on'):
         state.cfg_latex = True
         await message.channel.send('Ok...')
-    
+
     elif message.content.startswith('$deermath latex off'):
         state.cfg_latex = False
         await message.channel.send('Ok...')
@@ -34,7 +49,7 @@ async def on_message(message):
         try:
             cmd = state.parser.parse(message.content)
             out = dispatch_command(cmd, state)
-            
+
             if state.cfg_latex:
                 await message.channel.send(
                     file=bytes_io_to_discord_file(sympy_expr_to_img(out)))
@@ -62,8 +77,8 @@ async def on_message(message):
                 await message.channel.send(f"`{str(out)}`")
         except Exception as e:
             await message.channel.send(f"Oops, there has been an issue:\n{str(e)}")
-            
-    
+
+
     elif message.content.startswith('$test'):
         await message.channel.send(
             file=bytes_io_to_discord_file(
