@@ -3,11 +3,13 @@ from parse import Command, Parser
 from solve import solve
 from simplify import simplify
 from differentiate import differentiate
+from summation import summation
 
 COMMANDS_TO_IMPL = {
     'solve'.casefold() : solve,
     'simplify'.casefold(): simplify,
-    'diff'.casefold(): differentiate
+    'diff'.casefold(): differentiate,
+    'summation'.casefold(): summation
 }
 
 def dispatch_command(cmd: Command, state) -> Any:
