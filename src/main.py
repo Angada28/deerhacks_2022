@@ -57,9 +57,9 @@ PLOT GRAPH:
     COMMAND:
         plot {expression}
     EXAMPLE:
-        plot x^3 + 5'}
+        plot x^3 + 5
         '''
-        await message.channel.send(f"`{instructions}`")
+        await message.channel.send(f"```{instructions}```")
 
     elif message.content.startswith('$deermath latex on'):
         state.cfg_latex = True
