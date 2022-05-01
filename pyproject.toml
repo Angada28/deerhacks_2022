@@ -9,6 +9,7 @@ python = ">=3.8.0"
 numpy = "^1.22.2"
 discord = "^1.7.3"
 sympy = "^1.10.1"
+matplotlib = "^3.5.1"
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.6.0"
