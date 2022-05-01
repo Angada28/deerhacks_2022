@@ -15,7 +15,6 @@ from sympy.parsing.sympy_parser import standard_transformations, \
 client = discord.Client()
 state = BotState()
 
-
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
@@ -27,20 +26,41 @@ async def on_message(message):
         return
 
     if message.content.startswith('$deermath') and not message.content.startswith('$deermath '):
-        await message.channel.send(f"`{'Enter any of the following commands for:'}`")
-        await message.channel.send(f"`{'Derivatives:'}`")
-        await message.channel.send(f"`{'    diff {expression}'}`")
-        await message.channel.send(f"`{'    EXAMPLE: diff 5x^2'}`")
-        await message.channel.send(f"`{'    For a multivariable expression please add'}`")
-        await message.channel.send(f"`{'    the variabe to differentiate with respect to'}`")
-        await message.channel.send(f"`{'        diff 2x + y for y'}`")
-        await message.channel.send(f"`{'Summations:'}`")
-        await message.channel.send(f"`{'    summation {expression} where {variable} between {lower bound} and {upper bound}'}`")
-        await message.channel.send(f"`{'    EXAMPLE: summation 2k where k between 1 and n'}`")
-        await message.channel.send(f"`{'REPEAT (repeats the last command):'}`")
-        await message.channel.send(f"`{'    repeat'}`")
-        await message.channel.send(f"`{'SIMPLIFY:'}`")
-        await message.channel.send(f"`{'    simplify {expression}'}`")
+        instructions = '''Enter any of the following commands for:
+
+DERIVATIVES:
+    COMMAND:
+        diff {expression}
+    EXAMPLE: 
+        diff 5x^2
+    For a multivariable expression please add
+    the variable to differentiate with respect to:
+        EXAMPLE:
+            diff 2x + y for y
+
+SUMMATIONS:
+    COMMAND:
+        summation {expression} where {variable} between ...
+        ... {lower bound} and {upper bound}
+    EXAMPLE: 
+        summation 2k where k between 1 and n
+
+REPEAT (repeats the last command):
+    COMMAND:
+        $repeat
+
+SIMPLIFY:
+    COMMAND:
+        simplify {expression}
+
+PLOT GRAPH:
+    COMMAND:
+        plot {expression}
+    EXAMPLE:
+        plot x^3 + 5'}
+        '''
+        await message.channel.send(f"`{instructions}`")
+
     elif message.content.startswith('$deermath latex on'):
         state.cfg_latex = True
         await message.channel.send('Ok...')
