@@ -4,7 +4,7 @@ from sympy.abc import i, k, m, n, x
 from sympy import Sum, factorial, oo, IndexedBase, Function, symbols, pretty_print
 
 
-def summation(args: Union[SumArgs, None]):
+def summation(args: Union[SumArgs, None], state):
     if args is None:
         return 0
     else:
