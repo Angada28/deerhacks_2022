@@ -2,10 +2,12 @@ from typing import Any
 from parse import Command, Parser
 from solve import solve
 from simplify import simplify
+from differentiate import differentiate
 
 COMMANDS_TO_IMPL = {
     'solve'.casefold() : solve,
-    'simplify'.casefold(): simplify
+    'simplify'.casefold(): simplify,
+    'diff'.casefold(): differentiate
 }
 
 def dispatch_command(cmd: Command, state) -> Any:
