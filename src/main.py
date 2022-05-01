@@ -28,36 +28,72 @@ async def on_message(message):
     if message.content.startswith('$deermath') and not message.content.startswith('$deermath '):
         instructions = '''Enter any of the following commands for:
 
-DERIVATIVES:
+SOLVE:
+    DESCRIPTION:
+        Solves a system of equations.
     COMMAND:
-        diff {expression}
+        $deermath solve {set of equation} for {variable}
+    COMMAND:
+        $deermath solve {set of equation} for {variable} where ...
+        ... {...set of variable assignments...}
+    EXAMPLE:
+        $deermath solve x + y + z = 20 for z where x=2y, y=3z
+
+
+DERIVATIVES:
+    DESCRIPTION:
+        Finds the derivative.
+    COMMAND:
+        $deermath diff {expression}
     EXAMPLE: 
-        diff 5x^2
+        $deermath diff 5x^2
+    
     For a multivariable expression please add
     the variable to differentiate with respect to:
+    
         EXAMPLE:
-            diff 2x + y for y
+            $deermath diff 2x + y for y
+
 
 SUMMATIONS:
+    DESCRIPTION:
+        Finds the Riemann sum of an expression.
     COMMAND:
-        summation {expression} where {variable} between ...
+        $deermath summation {expression} where {variable} between ...
         ... {lower bound} and {upper bound}
     EXAMPLE: 
-        summation 2k where k between 1 and n
+        $deermath summation 2k where k between 1 and n
 
-REPEAT (repeats the last command):
-    COMMAND:
-        $repeat
 
 SIMPLIFY:
+    DESCRIPTION:
+        Simplifies an expression.
     COMMAND:
-        simplify {expression}
+        $deermath simplify {expression}
+    COMMAND:
+        $deermath simplify {expression} where {...set of variable assignments...}
+    EXAMPLE:
+        $deermath simplify x + 100^2y where x=a, y=2
+
 
 PLOT GRAPH:
+    DESCRIPTION:
+        Plots a graph with the given expression
+        with respect to x.
     COMMAND:
-        plot {expression}
+        $deermath plot {expression}
     EXAMPLE:
-        plot x^3 + 5
+        $deermath plot x^3 + 5
+
+
+REPEAT (repeats the last command):
+    DESCRIPTION:
+        Repeats the previous command.
+    COMMAND:
+        $repeat
+    NOTE:
+        Only the following commands can be repeated:
+        solve, summation, diff, simplify
         '''
         await message.channel.send(f"```{instructions}```")
 
