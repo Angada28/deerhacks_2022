@@ -6,6 +6,11 @@ from parse import Parser
 from commands import dispatch_command
 from out import sympy_expr_to_img, bytes_io_to_discord_file
 from state import BotState
+from sympy import symbols
+from sympy.plotting import plot
+from sympy.parsing.sympy_parser import parse_expr
+from sympy.parsing.sympy_parser import standard_transformations, \
+    implicit_multiplication_application
 
 client = discord.Client()
 state = BotState()
@@ -43,6 +48,21 @@ async def on_message(message):
     elif message.content.startswith('$deermath latex off'):
         state.cfg_latex = False
         await message.channel.send('Ok...')
+
+    elif message.content.startswith('$deermath plot'):
+        try:
+            arr = message.content.split(' ')
+            exp = '0'
+            if len(arr) > 2:
+                exp = arr[2]
+            exp = str(parse_expr(exp, transformations='all'))
+            plt = plot(exp, show=False)
+            plt.save('graph.png')
+            with open('graph.png', 'rb') as f:
+                picture = discord.File(f)
+                await message.channel.send(file=picture)
+        except Exception as e:
+            await message.channel.send(f"Oops, there has been an issue:\n{'Improper Expression was entered'}")
 
     elif message.content.startswith('$deermath'):
         await message.channel.send('Thinking...')
