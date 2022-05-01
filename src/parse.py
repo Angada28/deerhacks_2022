@@ -5,6 +5,7 @@ Parsing of bot commands.
 from dataclasses import dataclass
 from typing import Any, List
 from parse_simplify import parse_simplify
+from parse_summation import parse_summation
 
 from parse_solve import parse_solve
 
@@ -13,7 +14,8 @@ from parse_differentiate import parse_differentiate
 COMMANDS_TO_ARG_PARSER = {
     'solve'.casefold(): parse_solve,
     'simplify'.casefold(): parse_simplify,
-    'diff'.casefold(): parse_differentiate
+    'diff'.casefold(): parse_differentiate,
+    'summation'.casefold(): parse_summation
 }
 
 @dataclass
