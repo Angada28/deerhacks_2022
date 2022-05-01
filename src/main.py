@@ -94,6 +94,13 @@ REPEAT (repeats the last command):
     NOTE:
         Only the following commands can be repeated:
         solve, summation, diff, simplify
+        
+LATEX ON/OFF:
+    DESCRIPTION:
+        Turns latex on/off.
+    COMMANDS:
+        $deermath latex on
+        $deermath latex off
         '''
         await message.channel.send(f"```{instructions}```")
 
